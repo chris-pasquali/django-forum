@@ -1,0 +1,23 @@
+from django.forms import ModelForm
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from django.contrib.auth.models import User
+
+from .models import *
+
+class CreatePost(ModelForm):
+  class Meta:
+    model = Post
+    fields = '__all__'
+    exclude = ['user_profile']
+
+class CommentForm(ModelForm):
+  content = forms.CharField(label='', widget=forms.Textarea(attrs={
+    'class': 'form-control',
+    'placeholder': 'Type your comment',
+    'id': 'usercomment',
+    'rows': '3'
+  }))
+  class Meta:
+    model = Comment
+    fields = ('content',)

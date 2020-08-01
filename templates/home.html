@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1 class="text-center">Welcome to the Forum</h1>
+<br />
+<div class="container">
+  <div class="card mb-3">
+    <h5 class="card-header">Featured</h5>
+    {% for post in posts  %}
+    <div class="card d-flex align-items-stretch border-primary mx-auto mb-4 mt-4">
+      <div class="card-body">
+        <h5 class="card-title"><a href="{% url 'post-detail' post.id %}">{{post.title}}</a></h5>
+        <span>
+          {% for tag in post.tags.all %}
+          <span>
+            <h6 class="card-subtitle mb-2 text-muted">{{tag}}</h6>
+          </span>
+
+          {% endfor %}
+        </span>
+        <p class="card-text">{{post.content}}</p>
+        <span>
+          <small class="pr-5"><a href="{% url 'user-profile' post.user_profile.id %}">{{post.user_profile.user.username}}</a></small>
+          <small>{{post.timestamp|timesince}}</small>
+        </span>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+
+</div>
+{% endblock content %}

@@ -15,13 +15,17 @@ class UserProfile(models.Model):
   last_name = models.CharField(max_length=200, null=True)
   phone = models.CharField(max_length=200, null=True)
   email = models.CharField(max_length=200, null=True)
-  profile_picture = models.ImageField(null=True, blank=True)
+  profile_picture = models.ImageField(default="profile1.png", null=True, blank=True)
   date_created = models.DateTimeField(auto_now_add=True, null=True)
 
   @property
   def full_name(self):
     return '{0} {1}'.format(self.first_name, self.last_name)
     # return full_name.title()
+
+  # @property
+  # def username(self):
+  #   return user.username
   
   def __str__(self):
     return self.full_name

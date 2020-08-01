@@ -1,43 +1,38 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block content %}
 
-<div class="container">
-  <div class="row mx-auto mb-5">
-    <div class="col">
-      <div class="card mt-4 user-profile mr-5" style="height: 100%;">
-        <div class="text-center pt-3">
-          <!-- div class="col-md-12 col-md-12-sm-12 col-xs-12 text-center pt-3" -->
-          <!-- user profile picture -->
-          <img class="profile-pic" src="{{user_profile.profile_picture.url}}">
-          <!-- <img src="http://nicesnippets.com/demo/1499344631_malecostume.png"> -->
+<div class="container mt-5">
 
-        </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card card-body">
+        <!-- <a class="btn btn-warning" href="{% url 'home' %}"> &#8592; Back to Profile</a> -->
+        <h3 style="text-align: center">Account Settings</h3>
+        <hr>
+        <img class="profile-pic img-fluid rounded-circle" src="{{user_profile.profile_picture.url}}">
         <div class="mt-3 mb-3 pl-4 pr-4 text-center">
           <h5 class="card-subtitle text-muted pb-3">{{user_profile.user.username}}</h5>
           <h5 class=" card-subtitle text-muted pb-3">{{user_profile.full_name}}</h5>
           <h5 class="card-subtitle text-muted pb-3">Date Joined: {{user_profile.date_created|date:"M d Y"}}</h5>
         </div>
       </div>
-
     </div>
+    <div class="col-md-9">
+      <div class="card card-body">
 
-    <div class="col">
-      <div class="card mt-4 user-stats text-center" style="height: 100%;">
-        <h4 class="card-title pt-5 mb-5">User Activity</h4>
-        <div class="mb-3 pl-4 pr-4 align-self-center">
-          <h5 class="card-subtitle text-muted pb-3">Number of Posts: {{no_posts}}</h5>
-          <h5 class="card-subtitle text-muted pb-3">Number of Comments: {{no_comments}}</h5>
-          <h5 class="card-subtitle text-muted">Last Active: {{last_active | timesince}} ago</h5>
-        </div>
+        <form method="POST" action="" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{form.as_p}}
 
+          <input class="btn btn-primary" type="submit" name="Update Information">
+        </form>
       </div>
     </div>
-
   </div>
 
-  <div class="card user-activity ">
+  <div class="card align-self-stretch user-activity mt-5">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts"
@@ -60,30 +55,37 @@
           <div class="card-body">
             {{post.content}}
           </div>
+          <button type="button" class="btn btn-outline-warning btn-sm align-self-stretch mb-2 ml-2 mr-2">Edit</button>
         </div>
         {% endfor %}
       </div>
+
       <div class="tab-pane fade mb-3 mx-auto" id="comments" role="tabpanel" aria-labelledby="comments-tab">
         {% for comment in comments %}
-        <div class="card text-center mx-auto align-self-stretch mb-3">
-          <div class="card-title">
-            <span>
-              <a href="{% url 'post-detail' comment.post.id %}">{{comment.post.title}}</a>
-              -
-              <small class="card-subtitle text-muted">
-                <a href="">{{comment.post.user_profile.user.username}}</a>
-              </small>
+        <span>
+          <div class="card border-primary text-center mx-auto align-self-stretch ml-4 mr-4 mt-4">
+            <div class="card-title">
+              <span>
+                <a href="{% url 'post-detail' comment.post.id %}">{{comment.post.title}}</a>
+                -
+                <small class="card-subtitle text-muted">
+                  <a href="">{{comment.post.user_profile.user.username}}</a>
+                </small>
 
-            </span>
+              </span>
 
+            </div>
+            <div class="card-body border-primary">
+              <span>
+                <small class="text-muted">{{comment.user_profile.user.username}}: </small>
+                {{comment.content}}
+              </span>
+            </div>
+            <button type="button" class="btn btn-outline-warning btn-sm align-self-stretch mb-2 ml-2 mr-2">Edit</button>
           </div>
-          <div class="card-body border-primary">
-            <span>
-              <small class="text-muted">{{comment.user_profile.user.username}}: </small>
-              {{comment.content}}
-            </span>
-          </div>
-        </div>
+          
+        </span>
+
         {% endfor %}
       </div>
       <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
@@ -94,18 +96,26 @@
 </div>
 
 <style>
-  .user-profile,
-  .user-stats,
-  .user-activity {
-    box-shadow: 2px 2px 2px 2px;
-  }
-
   .profile-pic {
-    max-width: 80px;
-    max-height: 80px;
+    max-width: 85px;
+    max-height: 85px;
     margin: 0 auto;
     border-radius: 50%;
   }
 </style>
 
+<!-- <div class="card card-body">
+  <form method="POST" class="form px-auto" action='.' enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form}}
+    <button class="btn btn-primary mt-3" type="submit">Submit</button>
+  </form>
+</div>
+
+<style>
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+</style> -->
 {% endblock content %}

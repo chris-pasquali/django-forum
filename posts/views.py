@@ -109,4 +109,26 @@ def profile_view(request, id):
     'last_active': last_active
   }
   return render(request, 'user-profile.html', context)
-# def my_profile_view(request, pk):
+
+# @login_required(login_url='login')
+def account_settings(request):
+  # user_profile = request.user.user_profile
+  user_profile = UserProfile.objects.get(user=request.user)
+  print(user_profile)
+  form = UserProfileForm(instance=user_profile)
+
+  if request.method == 'POST':
+    form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+    if form.is_valid():
+      form.save()
+
+  posts = Post.objects.filter(user_profile=user_profile) # retreives all posts by user
+  comments = Comment.objects.filter(user_profile=user_profile)
+
+  context = {
+    'user_profile': user_profile,
+    'form': form,
+    'posts': posts,
+    'comments': comments,
+  }
+  return render(request, 'account-settings.html', context)

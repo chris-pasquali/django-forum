@@ -21,3 +21,10 @@ class CommentForm(ModelForm):
   class Meta:
     model = Comment
     fields = ('content',)
+
+class UserProfileForm(ModelForm):
+  class Meta:
+    model = UserProfile
+    # fields = '__all__'
+    fields = ['first_name', 'last_name', 'phone', 'email', 'profile_picture',]
+    exclude = ['user']

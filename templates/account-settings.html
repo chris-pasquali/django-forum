@@ -55,7 +55,7 @@
           <div class="card-body">
             {{post.content}}
           </div>
-          <button type="button" class="btn btn-outline-warning btn-sm align-self-stretch mb-2 ml-2 mr-2">Edit</button>
+          <a href="{% url 'update-post' post.id %}" class="btn btn-outline-warning btn-sm align-self-stretch mb-2 ml-2 mr-2">Edit</a>
         </div>
         {% endfor %}
       </div>

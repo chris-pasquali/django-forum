@@ -44,8 +44,11 @@ def create_post(request):
     if form.is_valid():
       form.instance.user_profile = user_profile
       form.save()
-      return redirect('home')
-  
+      return redirect(reverse("post-detail", kwargs={
+        'id': form.instance.id
+      }))
+      # return redirect('home')
+
   context = {
     'form': form
   }
@@ -66,7 +69,7 @@ def detail_view(request, pk):
       comment_form.instance.post = post
       comment_form.save()
       return redirect(reverse("post-detail", kwargs={
-        'pk': post.pk
+        'pk': post.id
       }))
   
   context = {
@@ -132,3 +135,39 @@ def account_settings(request):
     'comments': comments,
   }
   return render(request, 'account-settings.html', context)
+
+def updatePost(request, pk):
+  post = Post.objects.get(id=pk)
+  form = CreatePost(instance=post)
+
+  if request.method == 'POST':
+    form = CreatePost(request.POST, request.FILES or None, instance=post)
+    user_profile = get_user_profile(request.user)
+    if form.is_valid():
+      form.save()
+      return redirect(reverse("post-detail", kwargs={
+        'pk': post.id
+      }))
+      # return redirect("account")
+  
+  context = {
+    'form': form,
+  }
+
+  return render(request, 'create.html', context)
+
+def updateComment(request, pk):
+  comment = Comment.objects.get(id=pk)
+  form = CommentForm(instance=comment)
+
+  if request.method == 'POST':
+    form = CommentForm(request.POST, request.FILES or None, instance=comment)
+    user_profile = get_user_profile(request.user)
+    if form.is_valid():
+      form.save()
+      return redirect('account')
+  
+  context = {
+    'form': form,
+  }
+  return render(request, '', context)
